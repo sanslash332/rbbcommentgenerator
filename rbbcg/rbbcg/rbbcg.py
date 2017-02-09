@@ -14,6 +14,7 @@ import simplejson as js
 import random
 import codecs
 import urllib.request
+import re
 
 url = "https://dl.dropboxusercontent.com/u/13634494/No%20borrar/frases.json"
 
@@ -29,14 +30,17 @@ except Exception:
 
 data = js.loads(f.read())
 f.close()
+p = re.compile('%([a-zA-Z0-9\ ]+)%')
 
 frase=""
 frase = data['frases'][random.randint(0,len(data['frases'])-1)]
 
-for x in range(1,6):
-    while "%"+str(x) in frase:
-        parte = data["arg"+str(x)][random.randint(0,len(data["arg"+str(x)])-1)]
-        frase=frase.replace("%"+str(x),parte,1)
+for x in p.finditer(frase):
+    for keyword in x.groups():
+
+    
+        parte = data[keyword][random.randint(0,len(data[keyword])-1)]
+        frase=frase.replace("%"+keyword+"%",parte,1)
 
 
     
